@@ -1,0 +1,44 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="game-card.html">
+
+<polymer-element name="game-list" attributes="user games">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    game-card {
+      margin-bottom: 30px;
+    }
+    </style>
+    
+    <!-- add markup here -->
+
+    
+
+    <div layout vertical center>
+      <template repeat="{{game in games}}">
+        <div class="container" layout vertical center>
+          <game-card>
+            <div class="team1-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team1_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
+
+            <div class="team2-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team2_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
+            
+            <div class="team1-name name">{{ game.team1_code}}</div>
+            <div class="team2-name name">{{ game.team2_code}}</div>
+            <div class="team1-score score">{{ game.score1}}</div>
+            <div class="team2-score score">{{ game.score2}}</div>
+            <div class="date">{{ game.play_at }}</div>
+          </game-card>
+        </div>
+      </template>
+    </div>
+    
+  </template>
+
+  <script>
+  Polymer({});
+  </script>
+
+</polymer-element>

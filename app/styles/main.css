@@ -1,0 +1,50 @@
+html,body {
+  height: 100%;
+  margin: 0;
+  background-color: #fafafa;
+  font-family: 'RobotoDraft', sans-serif;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+body {
+  margin: 0;
+  background-color: #eee;
+  font-family: "RobotoDraft", sans-serif;
+  color: #444;
+  fill: #444;
+  font-weight: 400;
+}
+
+core-header-panel {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; 
+}
+core-toolbar {
+  background: #42bd41;
+  color: #eeff41;
+}
+paper-tabs {
+  width: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.container {
+  /*width: 80%;*/
+  /*margin: 50px auto;*/
+}
+@media (min-width: 481px) {
+  paper-tabs {
+    width: 200px;
+  }
+  .container {
+    /*width: 400px;*/
+  }
+}
+
+wc-app {
+  min-height: 450px;
+  overflow: hidden;
+}

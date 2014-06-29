@@ -1,0 +1,112 @@
+<link rel="import" href="../bower_components/firebase-element/firebase-element.html">
+<link rel="import" href="../bower_components/firebase-element/firebase-login.html">
+
+<polymer-element name="wc-service" hidden>
+  <template>
+    <firebase-login id="fbLogin" provider="google" params='{"rememberMe": true}' location="https://brazildraw.firebaseio.com" user="{{fbUser}}" statusKnown="{{statusKnown}}" log></firebase-login>
+    
+    <firebase-element id="fbUser" location="{{!offline && fbUser ? 'https://brazildraw.firebaseio.com/users/' + fbUser.uid : null}}" priority="{{user.score}}" dataReady="{{userReady}}" log></firebase-element>
+    
+    <firebase-element id="fbGames" location="https://brazildraw.firebaseio.com/games"  data="{{games}}" log></firebase-element>
+
+   
+  </template>
+  <script>
+  Polymer('wc-service', {
+    
+    publish: {
+      user: null,
+      games: null,
+      fbLogin: null,
+      url: ''
+    },
+
+    observe: {
+      'fbUser userReady': 'syncUser'
+    },
+
+    ready: function() {
+      this.fbLogin =  this.$.fbLogin;
+      console.log('fbLogin', this.$.fbLogin.login)
+      this.test = window.location.search.indexOf('test') >= 0;
+      this.offline = this.test || window.location.search.indexOf('offline') >= 0;
+      if (this.test) {
+        this.user = {
+          name: "Test U",
+          avatar: 1,
+          score: 0
+        };
+      } else {
+        try {
+          this.user = JSON.parse(localStorage.getItem('brazildraw-user'))
+        } catch (e) {
+          this.user = null;
+        }
+      }
+
+      window.addEventListener('offline', function() {
+        Firebase.goOffline();
+      });
+      window.addEventListener('online', function() {
+        Firebase.goOnline();
+      });
+    },
+
+    statusKnownChanged: function() {
+      console.log('status', this.statusKnown)
+      if (this.statusKnown && !this.offline && !this.fbUser) {
+        // this.$.fbLogin.login();
+      }
+    },
+
+    syncUser: function() {
+      if (this.fbUser && this.userReady) {
+        this.$.fbUser.data = this.user;
+      } else {
+        this.$.fbUser.data = null;
+      }
+    },
+
+    userChanged: function() {
+      console.log('user changed', this.user)
+      if (this.user = "login"){
+        this.login();
+        return;
+      }
+      if (!this.user) {
+        this.logout();
+      }
+      this.syncUser();
+      this.observeUser();
+      this.userFieldsChanged();
+    },
+
+    observeUser: function() {
+      if (this.userObserver) {
+        this.userObserver.close();
+        this.userObserver = null;
+      }
+      if (this.user) {
+        this.userObserver = new ObjectObserver(this.user);
+        this.userObserver.open(this.userFieldsChanged.bind(this));
+      }
+    },
+
+    userFieldsChanged: function(added, removed, changed, getOldValueFn) {
+      console.log('user changed observed', this.user)
+      localStorage.setItem('brazildraw-user', JSON.stringify(this.user));
+    },
+
+    login: function(){
+      if (!this.user || this.user === 'login'){
+        this.$.fbLogin.login();  
+      }
+      
+    },
+
+    logout: function() {
+      this.$.fbLogin.logout();
+    }
+  });
+  </script>
+</polymer-element>

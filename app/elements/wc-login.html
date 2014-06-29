@@ -1,0 +1,133 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+
+<polymer-element name="wc-login" attributes="user fbLogin" center layour vertical>
+  <template>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      background-color: #fff;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    
+    .card-header h2{
+      color: #14e715;
+
+    }
+
+    .bg {
+      background-color: #eee;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px 16px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+    }
+
+    .wide.card {
+      margin-top: 64px;
+      max-height: 580px;
+      max-width: 512px;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      border-radius: 2px;
+    }
+
+    .header {
+      font-size: 1.5em;
+      color: #42bd41;
+      font-weight: lighter;
+    }
+    .header.spaced {
+      margin-top: 16px;
+    }
+
+    .indent {
+      padding: 0 2px;
+    }
+
+    .main {
+      position: relative;
+    }
+
+    p{
+      color: #9e9e9e;
+    }
+
+    .login-btn{
+      color: #eeff41;
+      background: #42bd41;
+    }
+
+    .login-btn::shadow #ripple {
+      color: #eeff41;
+    }
+
+    .login-btn::shadow #icon {
+      fill: #eeff41;
+    }
+
+
+    :host([animate]:not(.core-selected)) .bg {
+      z-index: -1;
+    }
+
+    .logo img{
+      width: 100%;
+    }
+
+    .logo{
+      width: 25%;
+    }
+
+    </style>
+
+    <div class="bg" fit dummy></div>
+
+    <div class="main" flex layout vertical>
+      <paper-shadow z="1"></paper-shadow>
+      <div class="card" flex layout vertical>
+        <div layout vertical flex>
+            <div class="indent" layout horizontal justified center >
+              <div class="header">A Porra do Brazil</div>  
+              <div class="logo" >
+                <img src="http://i.imgur.com/Xuh7AXJ.png" alt="">
+              </div>
+              
+              
+             
+            </div>
+             <p>Sign with Google</p>
+            <paper-button class="login-btn" on-tap="{{signIn}}" raisedButton="true" icon="arrow-forward" label="Sign in with Google"></paper-button>
+            
+        </div>
+      </div>
+      
+    </div>
+
+  </template>
+  <script>
+  Polymer({
+
+    signIn: function(){
+      console.log('sign in');
+      console.log('user', this.user, 'login', this.fbLogin)
+      // if (this.fbLogin) this.fbLogin.login();
+      this.user = "login"
+    }
+
+  });
+  </script>
+</polymer-element>

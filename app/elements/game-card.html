@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
+
+<polymer-element name="game-card">
+  <template>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      background-color: #fff;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    
+    polyfill-next-selector { content: '.card-header .date'; }
+    .card-header ::content .date {
+      margin: 0;
+      font-size: 0.8rem;
+      font-weight: 300;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #9e9e9e;
+    }
+    polyfill-next-selector { content: '.card-header .flag'; }
+    .card-header ::content .flag {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    polyfill-next-selector { content: '.card-header .name'; }
+    .card-header ::content .name {
+      font-size: 1.5em;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    polyfill-next-selector { content: '.score'; }
+    ::content .score {
+      font-size: 2.5em;
+      font-weight: 100;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .card-header .vs {
+      font-size: 0.8em;
+      font-weight: 500;
+      text-align: center;
+      text-transform: uppercase;
+      color: #9e9e9e;
+    }
+
+    .dash {
+      font-size: 0.8em;
+      font-weight: 500;
+      text-align: center;
+      text-transform: uppercase;
+      color: #9e9e9e;
+    }
+
+    core-icon-button {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+    }
+    core-icon-button {
+      fill: #636363;
+    }
+    :host([favorite]) core-icon-button {
+      fill: #da4336;
+    }
+
+
+    .card-header ::content .team1, .card-header ::content .team2{
+      font-weight: bold;
+    }
+    </style>
+
+    <!-- CARD CONTENTS GO HERE -->
+    <paper-shadow z="1"></paper-shadow>
+    <div class="card-header" layout vertical center-justified>
+      
+      <content select=".date"></content>
+
+      <div layout horizontal center>
+        <div class="team1" layout horizontal center>
+          <content select=".team1-flag"></content>
+          <content select=".team1-name"></content>
+        </div>
+        <div flex class="vs">vs.</div>
+        <div class="team2" layout horizontal center>
+          <content select=".team2-flag"></content>
+          <content select=".team2-name"></content>
+        </div>
+      </div>
+    </div>
+
+    <div layout horizontal center>
+      <content select=".team1-score"></content>
+      <div flex class="dash">-</div>
+      <content select=".team2-score"></content>
+    </div>
+
+    <content></content>
+    
+  </template>
+  <script>
+   Polymer({});
+  </script>
+</polymer-element>
