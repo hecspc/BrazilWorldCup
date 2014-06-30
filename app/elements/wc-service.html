@@ -3,11 +3,13 @@
 
 <polymer-element name="wc-service" hidden>
   <template>
-    <firebase-login id="fbLogin" provider="google" params='{"rememberMe": true}' location="https://brazildraw.firebaseio.com" user="{{fbUser}}" statusKnown="{{statusKnown}}" log></firebase-login>
+    <firebase-login id="fbLogin" provider="google" params='{"rememberMe": true}' location="https://brazildraw.firebaseio.com" user="{{fbUser}}" statusKnown="{{statusKnown}}"></firebase-login>
     
     <firebase-element id="fbUser" location="{{!offline && fbUser ? 'https://brazildraw.firebaseio.com/users/' + fbUser.uid : null}}" priority="{{user.score}}" dataReady="{{userReady}}"></firebase-element>
     
-    <firebase-element id="fbGames" location="https://brazildraw.firebaseio.com/games"  data="{{games}}" log></firebase-element>
+    <firebase-element id="fbGames" location="https://brazildraw.firebaseio.com/games"  data="{{games}}"></firebase-element>
+
+    <firebase-element id="fbUsers" location="https://brazildraw.firebaseio.com/users"  data="{{users}}"></firebase-element>
 
    
   </template>
@@ -18,6 +20,7 @@
       user: null,
       games: null,
       action: null,
+      users: null,
       url: ''
     },
 
@@ -60,7 +63,6 @@
     },
 
     syncUser: function() {
-      console.log('syncuser', this.fbUser, this.fbUser, this.userReady, this.user)
       if (this.fbUser && this.userReady && this.user) {
         this.$.fbUser.data = this.user;
       } else if (this.fbUser && this.userReady){
@@ -68,7 +70,7 @@
       } else {
         this.user = null;
       }
-      console.log('syncuser', this.fbUser, this.fbUser, this.userReady, this.user)
+      
     },
 
     userChanged: function() {

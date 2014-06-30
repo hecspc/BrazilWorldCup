@@ -12,7 +12,7 @@
 <link rel="import" href="wc-leaderboard.html">
 
 
-<polymer-element name="wc-app" attributes="user games action">
+<polymer-element name="wc-app" attributes="user games action users">
   
   <template>
     <style>
@@ -66,6 +66,7 @@
           
           <game-list user="{{user}}" games="{{games}}" hidden?="{{show !== 'Games'}}"></game-list>
         
+          <wc-leaderboard users="{{users}}"  user="{{user}}" hidden?="{{show != 'Leaderboard'}}"></wc-leaderboard>
 
         </core-header-panel>
 
@@ -86,8 +87,11 @@
         this.narrow = details.narrow
       },
 
+      showChanged: function(){
+        this.$.settings.selected = "main";
+      },
+
       menuAction: function(){
-        console.log('open menu')
         if (this.$.settings.selected == "drawer"){
           this.$.settings.selected = "main"
         }else{

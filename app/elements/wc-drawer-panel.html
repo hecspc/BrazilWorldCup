@@ -78,15 +78,12 @@
       
         <div class="avatar" style="background: url('{{ user.thirdPartyUserData.picture}}'); background-size: cover; background-position: 50% 50%;" horizontal layout end>
            <div class="name" >
-            {{ user.thirdPartyUserData.name }}
+            {{ user.displayName}}
           </div>
 
           <paper-fab class="mini logout-btn" icon="exit-to-app" on-tap="{{logout}}"></paper-fab>
         </div>
          
-        
-        
-        
       </div>
 
       <div class="main">
@@ -106,6 +103,7 @@
         if (detail.isSelected){
           this.show = detail.item.label;
         }
+
       },
       logout: function(){
         console.log('Logout')
