@@ -5,7 +5,7 @@
   <template>
     <firebase-login id="fbLogin" provider="google" params='{"rememberMe": true}' location="https://brazildraw.firebaseio.com" user="{{fbUser}}" statusKnown="{{statusKnown}}" log></firebase-login>
     
-    <firebase-element id="fbUser" location="{{!offline && fbUser ? 'https://brazildraw.firebaseio.com/users/' + fbUser.uid : null}}" priority="{{user.score}}" dataReady="{{userReady}}" log></firebase-element>
+    <firebase-element id="fbUser" location="{{!offline && fbUser ? 'https://brazildraw.firebaseio.com/users/' + fbUser.uid : null}}" priority="{{user.score}}" dataReady="{{userReady}}"></firebase-element>
     
     <firebase-element id="fbGames" location="https://brazildraw.firebaseio.com/games"  data="{{games}}" log></firebase-element>
 
@@ -17,7 +17,7 @@
     publish: {
       user: null,
       games: null,
-      fbLogin: null,
+      action: null,
       url: ''
     },
 
@@ -26,23 +26,13 @@
     },
 
     ready: function() {
-      this.fbLogin =  this.$.fbLogin;
-      console.log('fbLogin', this.$.fbLogin.login)
-      this.test = window.location.search.indexOf('test') >= 0;
-      this.offline = this.test || window.location.search.indexOf('offline') >= 0;
-      if (this.test) {
-        this.user = {
-          name: "Test U",
-          avatar: 1,
-          score: 0
-        };
-      } else {
-        try {
-          this.user = JSON.parse(localStorage.getItem('brazildraw-user'))
-        } catch (e) {
-          this.user = null;
-        }
+    
+      try {
+        this.user = JSON.parse(localStorage.getItem('brazildraw-user'))
+      } catch (e) {
+        this.user = null;
       }
+      
 
       window.addEventListener('offline', function() {
         Firebase.goOffline();
@@ -53,26 +43,36 @@
     },
 
     statusKnownChanged: function() {
-      console.log('status', this.statusKnown)
+      
       if (this.statusKnown && !this.offline && !this.fbUser) {
         // this.$.fbLogin.login();
+      
       }
+    },
+
+    actionChanged: function(){
+      if (this.action === 'login'){
+        this.login();
+      }else if (this.action === 'logout'){
+        this.logout();
+      }
+
     },
 
     syncUser: function() {
-      if (this.fbUser && this.userReady) {
+      console.log('syncuser', this.fbUser, this.fbUser, this.userReady, this.user)
+      if (this.fbUser && this.userReady && this.user) {
         this.$.fbUser.data = this.user;
+      } else if (this.fbUser && this.userReady){
+        this.user = this.fbUser;
       } else {
-        this.$.fbUser.data = null;
+        this.user = null;
       }
+      console.log('syncuser', this.fbUser, this.fbUser, this.userReady, this.user)
     },
 
     userChanged: function() {
-      console.log('user changed', this.user)
-      if (this.user = "login"){
-        this.login();
-        return;
-      }
+      
       if (!this.user) {
         this.logout();
       }
@@ -93,18 +93,19 @@
     },
 
     userFieldsChanged: function(added, removed, changed, getOldValueFn) {
-      console.log('user changed observed', this.user)
-      localStorage.setItem('brazildraw-user', JSON.stringify(this.user));
+      // localStorage.setItem('brazildraw-user', JSON.stringify(this.user));
     },
 
     login: function(){
-      if (!this.user || this.user === 'login'){
+      console.log('login')
+      if (!this.user ){
         this.$.fbLogin.login();  
       }
       
     },
 
     logout: function() {
+      console.log("logging out")
       this.$.fbLogin.logout();
     }
   });

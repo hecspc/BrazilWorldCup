@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 
-<polymer-element name="wc-login" attributes="user fbLogin" center layour vertical>
+<polymer-element name="wc-login" attributes="user action" center layour vertical>
   <template>
     <style>
     :host {
@@ -122,10 +122,7 @@
   Polymer({
 
     signIn: function(){
-      console.log('sign in');
-      console.log('user', this.user, 'login', this.fbLogin)
-      // if (this.fbLogin) this.fbLogin.login();
-      this.user = "login"
+      this.action = "login"
     }
 
   });

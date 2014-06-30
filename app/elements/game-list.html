@@ -11,15 +11,26 @@
     game-card {
       margin-bottom: 30px;
     }
+
+    .container {
+      width: 80%;
+      margin: 50px auto;
+    }
+
+     @media (min-width: 481px) {
+      
+        .container {
+          /*width: 400px;*/
+        }
+      }
     </style>
     
     <!-- add markup here -->
 
     
 
-    <div layout vertical center>
+    <div class="container" layout vertical center>
       <template repeat="{{game in games}}">
-        <div class="container" layout vertical center>
           <game-card>
             <div class="team1-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team1_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
 
@@ -31,7 +42,6 @@
             <div class="team2-score score">{{ game.score2}}</div>
             <div class="date">{{ game.play_at }}</div>
           </game-card>
-        </div>
       </template>
     </div>
     

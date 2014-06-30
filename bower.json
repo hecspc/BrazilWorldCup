@@ -7,7 +7,8 @@
     "paper-elements": "Polymer/paper-elements#~0.3.3",
     "firebase": "~1.0.17",
     "firebase-element": "Polymer/firebase-element#~0.3.3",
-    "firebase-simple-login": "~1.6.1"
+    "firebase-simple-login": "~1.6.1",
+    "paper-item": "Polymer/paper-item#~0.3.3"
   },
   "devDependencies": {}
 }

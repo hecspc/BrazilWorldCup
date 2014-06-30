@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+
+<polymer-element name="wc-drawer-panel" attributes="user action show">
+  <template>
+    <style>
+      :host{
+        display: block;
+        background-color: #fff;
+
+      }
+
+      core-toolbar {
+        background: #c6ff00;
+        color: #ff5722;
+      }
+
+      .header{
+        position: relative;
+      }
+
+      .avatar{
+        width: 100%;
+        height: 200px;
+      }
+
+      .avatar img{
+        width: 100%;
+      }
+
+      .name{
+        font-size: 1.5em;
+        color: #fff;
+        position: relative;
+        margin-bottom: 30px;
+        margin-left: 30px;
+        font-weight: 500;
+
+      }
+
+      .logout-btn{
+        bottom: -20px;
+        right: 20px;
+        position: absolute;
+      }
+      
+      paper-item{
+        color: #222;
+        font-size: 1.2em;
+        font-weight: 300;
+        
+      }
+
+      paper-item.core-selected{
+        color: #42bd41;
+        
+      }
+
+      paper-item::shadow #ripple{
+        color: #42bd41;
+        
+      }
+
+      .main{
+        margin-top: 50px;
+      }
+    </style>
+
+      <div class="header">
+      
+        <div class="avatar" style="background: url('{{ user.thirdPartyUserData.picture}}'); background-size: cover; background-position: 50% 50%;" horizontal layout end>
+           <div class="name" >
+            {{ user.thirdPartyUserData.name }}
+          </div>
+
+          <paper-fab class="mini logout-btn" icon="exit-to-app" on-tap="{{logout}}"></paper-fab>
+        </div>
+         
+        
+        
+        
+      </div>
+
+      <div class="main">
+        <core-menu selected="0" on-core-select="{{menuSelect}}">
+          <paper-item iconSrc="http://icons.iconarchive.com/icons/icons-land/metro-raster-sport/96/Soccer-Ball-icon.png" label="Games"></paper-item>
+          <paper-item iconSrc="https://cdn3.iconfinder.com/data/icons/line/36/trophy-512.png" label="Leaderboard"></paper-item>
+          <paper-item iconSrc="http://icons.iconarchive.com/icons/visualpharm/icons8-metro-style/256/Sections-of-Website-About-icon.png" label="About"></paper-item>
+        </core-menu>
+      </div>
+  </template>
+  <script>
+    Polymer('wc-drawer-panel',{
+      publish: {
+        show: null
+      },
+      menuSelect: function(e, detail){
+        if (detail.isSelected){
+          this.show = detail.item.label;
+        }
+      },
+      logout: function(){
+        console.log('Logout')
+        // this.action = 'logout';
+        this.user = null;
+      }
+    })
+  </script>
+</polymer-element>

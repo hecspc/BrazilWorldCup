@@ -1,40 +1,104 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../bower_components/core-drawer-panel/core-drawer-panel.html">
 <link rel="import" href="../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../bower_components/core-icon/core-icon.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="game-list.html">
 <link rel="import" href="wc-login.html">
+<link rel="import" href="wc-drawer-panel.html">
+<link rel="import" href="wc-leaderboard.html">
 
 
-<polymer-element name="wc-app" attributes="user games login">
+<polymer-element name="wc-app" attributes="user games action">
   
   <template>
-    <link rel="stylesheet" href="/styles/main.css">
-
-     <core-header-panel hidden?="{{user == null}}">
+    <style>
+      core-header-panel {
+        height: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch; 
+      }
+      core-toolbar {
+        background: #42bd41;
+        color: #eeff41;
+      }
       
-      <core-toolbar class="medium-tall">
-        <div flex>A Porra do Brasil</div>
-        <paper-tabs valueattr="name" self-end  class="bottom fit">
-          <paper-tab name="games">GAMES</paper-tab>
-          <paper-tab name="leaderboard">LEADERBOARD</paper-tab>
-        </paper-tabs>
+      core-icon-button{
+        margin-right: 10px;
+      }
+
+      .drawer{
+        background: #fff;
+      }
+      
+
+      .logo{
+        width: 60px;
+      }
+      .logo img{
+        width: 100%;
+      }
+    </style>
+      
+
+      <core-drawer-panel id="settings" name="settings" hidden?="{{user == null || user == 'login'}}">
+        <div class="drawer" drawer>
+          <wc-drawer-panel user="{{user}}" show="{{show}}" action="{{action}}"></wc-drawer-panel>
+         </div>
+        <div main>
+         <core-header-panel mode="waterfall" >
+
+          
+          <core-toolbar>
+            <div layout horizontal center >
+              <core-icon-button icon="menu" on-tap="{{menuAction}}" hidden?="{{!narrow}}"></core-icon-button>
+              
+              <div class="welcome">
+                {{show}}
+              </div>
+            </div>
+            
+            
+          </core-toolbar>
+          
+          <game-list user="{{user}}" games="{{games}}" hidden?="{{show !== 'Games'}}"></game-list>
         
-      </core-toolbar>
 
-      
-      <game-list user="{{user}}" games="{{games}}"></game-list>
-      
+        </core-header-panel>
 
+      </div>
+    </core-drawer-panel>
 
-    </core-header-panel>
-
-    <wc-login id="login" name="login" user="{{user}}" fbLogin="{{fbLogin}}" hidden?="{{ user != null}}"></wc-login>
+    <wc-login id="login" name="login" user="{{user}}" action="{{action}}" hidden?="{{ user != null || user == 'login'}}"></wc-login>
 
   </template>
   <script>
-    Polymer('wc-app', {});
+    Polymer('wc-app', {
+
+      eventDelegates: {
+        'core-responsive-change': 'layoutChange'
+      },
+
+      layoutChange: function(e, details){
+        this.narrow = details.narrow
+      },
+
+      menuAction: function(){
+        console.log('open menu')
+        if (this.$.settings.selected == "drawer"){
+          this.$.settings.selected = "main"
+        }else{
+          this.$.settings.selected = "drawer"
+        }
+      },
+
+      logout: function(){
+        this.action = "logout"
+      }
+    });
     // var tabs = document.querySelector('paper-tabs');
     //   var list = document.querySelector('game-list');
 

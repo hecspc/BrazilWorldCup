@@ -5,7 +5,7 @@
     <title>Porra Brazil World Cup</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <script src="bower_components/platform/platform.js" debug log="data,watch,bind,ready"></script>
+    <script src="bower_components/platform/platform.js"></script>
     
     
   <link rel="import" href="bower_components/font-roboto/roboto.html">
@@ -24,10 +24,10 @@
   <body unresolved>
     <template is="auto-binding">
 
-    <wc-service id="service" games="{{games}}" user="{{user}}" login="{{login}}">
+    <wc-service id="service" games="{{games}}" user="{{user}}" action="{{action}}">
     </wc-service>
     
-    <wc-app fit user="{{user}}" games="{{games}}" login="{{login}}" touch-action="auto"></wc-app>
+    <wc-app fit user="{{user}}" games="{{games}}" action="{{action}}" touch-action="auto"></wc-app>
     
    
   </template>
