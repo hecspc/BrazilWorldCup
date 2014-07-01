@@ -287,6 +287,14 @@ module.exports = function (grunt) {
             '{,*/}*.html',
             'styles/fonts/{,*/}*.*'
           ]
+        },{
+          expand: true,
+          dot: true,
+          cwd: '<%= config.app %>/../',
+          dest: '<%= config.dist %>',
+          src: [
+            'bower_components/{,*/}*.*',
+          ]
         }]
       },
       styles: {
@@ -364,8 +372,8 @@ module.exports = function (grunt) {
     'uglify',
     'copy:dist',
     'rev',
-    'usemin',
-    'htmlmin'
+    'usemin'
+    // 'htmlmin'
   ]);
 
   grunt.registerTask('default', [
