@@ -1,0 +1,195 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<polymer-element name="game-card" attributes="game users user">
+  <template>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      background-color: #fff;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    
+    .card-header .date {
+      margin: 0;
+      font-size: 0.8rem;
+      font-weight: 300;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #9e9e9e;
+    }
+    
+    .card-header .flag {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .card-header .name {
+      font-size: 1.5em;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    
+    .score {
+      font-size: 2.5em;
+      font-weight: 100;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .card-header .vs {
+      font-size: 0.8em;
+      font-weight: 500;
+      text-align: center;
+      text-transform: uppercase;
+      color: #9e9e9e;
+    }
+
+    .dash {
+      font-size: 0.8em;
+      font-weight: 500;
+      text-align: center;
+      text-transform: uppercase;
+      color: #9e9e9e;
+    }
+
+    core-icon-button {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+    }
+    core-icon-button {
+      fill: #636363;
+    }
+    :host([favorite]) core-icon-button {
+      fill: #da4336;
+    }
+
+
+    .card-header .team1, .card-header .team2{
+      font-weight: bold;
+    }
+
+    paper-input{
+      width: 40px;
+    }
+
+    paper-input::shadow #labelSpan{
+      font-size: 0.5em;
+    }
+    </style>
+
+    <!-- CARD CONTENTS GO HERE -->
+    <paper-shadow z="1"></paper-shadow>
+    <div class="card-header" layout vertical center-justified >
+      
+      <div class="date">{{ game.play_at }}</div>
+
+      <div layout horizontal center>
+        <div class="team1" layout horizontal center>
+         <div class="team1-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team1_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
+          <div class="team1-name name">{{ game.team1_code}}</div>
+        </div>
+        <div flex class="vs">vs.</div>
+        <div class="team2" layout horizontal center>
+          <div class="team2-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team2_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
+         <div class="team2-name name">{{ game.team2_code}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div layout horizontal center on-keypress="{{ keypressAction }}">
+      <div class="team1-score score">{{ game.score1}}</div>
+      <div class="your-bet">
+        <paper-input id="bet1" floatingLabel label="Your bet" validate="^[0-9]*$" on-input-invalid="{{inputInvalidAction}}" on-change="{{placeBet1}}" value="{{ game.bets[user.uid] ? game.bets[user.uid].bet1 : null }}"></paper-input>
+
+      </div>
+      <div flex class="dash">-</div>
+      <paper-input id="bet2" floatingLabel label="Your bet" validate="^[0-9]*$" on-input-invalid="{{inputInvalidAction}}" on-change="{{placeBet2}}" value="{{ game.bets[user.uid] ? game.bets[user.uid].bet2 : null }}"></paper-input>
+      <div class="team2-score score">{{ game.score2}}</div>
+    </div>
+    
+    
+    
+  </template>
+  <script>
+   Polymer('game-card', {
+
+    publish: {
+      game: null
+    },
+
+    observe:{
+      'game': 'syncGame'
+    },
+
+    keypressAction: function(ev) {
+
+      var code = ev.keyCode || ev.charCode;
+      var key = ev.keyIdentifier;
+      console.log('keypress', code, key)
+      if (key === 'Enter' || code === 13) {
+        var target = ev.target;
+        if (target === this.$.bet1) {
+          // TODO(dfreedm): calling the focus event handler in lieu of a real api
+          this.$.bet2.focusAction();
+        } else if (target === this.$.bet2) {
+          // after "last" field, lower keyboard to show avatar list
+          this.$.bet2.blur();
+        }
+      }
+
+      
+
+    },
+
+    placeBet1: function(e, d){
+      if (!this.game.bets) this.game.bets = {};
+      var bet1 = this.$.bet1.value;
+      if (!this.$.bet1.invalid && (bet1 !== null || bet1 !== '') ){
+        if (!this.game.bets[this.user.uid]){
+          this.game.bets[this.user.uid] = { uid: this.user.uid }
+        }
+
+        this.game.bets[this.user.uid].bet1 = parseInt(bet1, 10);
+        
+      }
+
+      this.fire('bet-game', this.game);
+      
+    },
+
+    placeBet2: function(e, d){
+      if (!this.game.bets) this.game.bets = {};
+      var bet2 = this.$.bet2.value;
+      if (!this.$.bet2.invalid && (bet2 !== null || bet2 !== '') ){
+        if (!this.game.bets[this.user.uid]){
+          this.game.bets[this.user.uid] = { uid: this.user.uid }
+        }
+
+        this.game.bets[this.user.uid].bet2 = parseInt(bet2, 10);
+        
+        this.fire('bet-game', this.game);
+      }
+    },
+
+    syncGame: function(){
+      // console.log('bets', this.game)
+      
+    }
+
+   });
+  </script>
+</polymer-element>

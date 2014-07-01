@@ -1,0 +1,60 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/firebase-element/firebase-element.html">
+<link rel="import" href="game-card.html">
+
+<polymer-element name="game-list" attributes="user games users">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    game-card {
+      margin-bottom: 30px;
+    }
+
+    .container {
+      width: 80%;
+      margin: 10px auto;
+    }
+
+     @media (min-width: 481px) {
+      
+        .container {
+          /*width: 400px;*/
+        }
+      }
+    </style>
+    
+    <!-- add markup here -->
+
+     <firebase-element id="fbGames" childEvents location="https://brazildraw.firebaseio.com/games"  data="{{games}}" dataReady="{{gamesReady}}"></firebase-element>  
+  
+    <div class="container" layout vertical center>
+      <template repeat="{{game in games}}">
+          <game-card game="{{game}}" users="{{users}}" user="{{user}}" on-bet-game="{{gamesArrayChanged}}">
+            
+          </game-card>
+      </template>
+    </div>
+    
+  </template>
+
+  <script>
+  Polymer({
+    observe: {
+      'fbGames gamesReady': 'syncGames'
+    },
+
+
+    gamesArrayChanged: function(added, removed, changed, getOldValueFn){
+      console.log('gamesChanged', added, removed, changed, getOldValueFn);
+      console.log(this.games, this.gamesReady)
+      if (this.games && this.gamesReady){
+        this.$.fbGames.data = this.games;
+      }
+    }
+  });
+  </script>
+
+</polymer-element>

@@ -1,0 +1,104 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
+
+<polymer-element name="wc-leaderboard" attributes="users user">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    .card {
+      margin-bottom: 30px;
+      background-color: #fff;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    
+    .avatar {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 20px;
+    }
+
+    .avatar img{
+      width: 100%;
+    }
+
+    .container {
+      width: 80%;
+      margin: 10px auto;
+    }
+
+    .score-item{
+      margin-bottom: 20px;
+    }
+
+    .score-item.me {
+      /*color: #42bd41;*/
+    }
+
+    .score-item.me .name:after {
+      content: "IT'S YOU";
+      background-color: #42bd41;
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.5em;
+      padding: 2px 5px;
+      margin-left: 15px;
+      margin-bottom: 15px;
+    }
+
+     @media (min-width: 481px) {
+      
+        .container {
+          /*width: 400px;*/
+        }
+      }
+    </style>
+
+    <div class="container" layout vertical center>
+      
+      <div class="card">
+        <paper-shadow z="1"></paper-shadow>
+        <template repeat="{{ score in scores}}">
+          <div class="score-item {{ user.uid === score.uid ? 'me' : '' }}" layout horizontal center >
+            <div class="avatar">
+              <img src="{{ score.picture }}" alt="">
+            </div>
+            <div class="name" flex>{{ score.name }}</div>
+            <div class="score">{{ score.score }}</div>
+          </div>
+          
+        </template>
+      </div>
+    </div>
+  </template>
+  <script>
+  Polymer({
+
+    usersChanged: function(){
+      console.log('users', this.users)
+      var data = this.users;
+      var uids = Object.keys(data);
+      // this.newScores = {};
+      this.scores = uids.map(function(u) {
+        // this.newScores[u] = data[u].score;
+        return { 
+          uid: u, 
+          name: data[u].displayName, 
+          picture: data[u].thirdPartyUserData.picture, 
+          score: data[u].score || 0
+        };
+      });
+      console.log(this.scores);
+
+    }
+
+  });
+  </script>
+</polymer-element>
