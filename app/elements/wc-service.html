@@ -6,8 +6,6 @@
     <firebase-login id="fbLogin" provider="google" params='{"rememberMe": true}' location="https://brazildraw.firebaseio.com" user="{{fbUser}}" statusKnown="{{statusKnown}}"></firebase-login>
     
     <firebase-element id="fbUser" location="{{!offline && fbUser ? 'https://brazildraw.firebaseio.com/users/' + fbUser.uid : null}}" priority="{{user.score}}" dataReady="{{userReady}}"></firebase-element>
-    
-    <firebase-element id="fbGames" location="https://brazildraw.firebaseio.com/games"  data="{{games}}"></firebase-element>
 
     <firebase-element id="fbUsers" location="https://brazildraw.firebaseio.com/users"  data="{{users}}"></firebase-element>
 
@@ -25,7 +23,8 @@
     },
 
     observe: {
-      'fbUser userReady': 'syncUser'
+      'fbUser userReady': 'syncUser',
+      'games': 'syncGames'
     },
 
     ready: function() {
@@ -71,6 +70,14 @@
         this.user = null;
       }
       
+    },
+
+    gamesChanged: function(){
+      console.log('games changed', this.games)
+    },
+
+    syncGames: function(){
+      console.log('games', this.games)
     },
 
     userChanged: function() {

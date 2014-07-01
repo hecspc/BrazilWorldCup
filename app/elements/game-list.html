@@ -1,7 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/firebase-element/firebase-element.html">
 <link rel="import" href="game-card.html">
 
-<polymer-element name="game-list" attributes="user games">
+<polymer-element name="game-list" attributes="user games users">
   <template>
     <style>
     :host {
@@ -27,20 +28,12 @@
     
     <!-- add markup here -->
 
-    
-
+     <firebase-element id="fbGames" childEvents location="https://brazildraw.firebaseio.com/games"  data="{{games}}" dataReady="{{gamesReady}}"></firebase-element>  
+  
     <div class="container" layout vertical center>
       <template repeat="{{game in games}}">
-          <game-card>
-            <div class="team1-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team1_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
-
-            <div class="team2-flag flag" style="background: url(http://www.geonames.org/flags/x/{{game.team2_int}}.gif); background-size: cover; background-position: 50% 50%;"></div>
+          <game-card game="{{game}}" users="{{users}}" user="{{user}}" on-bet-game="{{gamesArrayChanged}}">
             
-            <div class="team1-name name">{{ game.team1_code}}</div>
-            <div class="team2-name name">{{ game.team2_code}}</div>
-            <div class="team1-score score">{{ game.score1}}</div>
-            <div class="team2-score score">{{ game.score2}}</div>
-            <div class="date">{{ game.play_at }}</div>
           </game-card>
       </template>
     </div>
@@ -48,7 +41,20 @@
   </template>
 
   <script>
-  Polymer({});
+  Polymer({
+    observe: {
+      'fbGames gamesReady': 'syncGames'
+    },
+
+
+    gamesArrayChanged: function(added, removed, changed, getOldValueFn){
+      console.log('gamesChanged', added, removed, changed, getOldValueFn);
+      console.log(this.games, this.gamesReady)
+      if (this.games && this.gamesReady){
+        this.$.fbGames.data = this.games;
+      }
+    }
+  });
   </script>
 
 </polymer-element>
